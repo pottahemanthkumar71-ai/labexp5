@@ -1,32 +1,35 @@
 import { useState, useEffect } from "react";
 
-const Signup = ({ setRegisteredUser, setShowSignUp }) => {
+const SignIn = ({ setIsAuthenticated, setShowSignUp }) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  // ✅ Derived State
-  const isValid = email.includes("@") && password.length >= 6;
+  const isValid = email !== "" && password !== "";
 
   useEffect(() => {
-    console.log("SignUp Re-rendered");
-  });
-
+    console.log("SignIn Re-rendered");
+  })
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const user = { email, password };
+    const storedUser = JSON.parse(localStorage.getItem("registeredUser"));
 
-    setRegisteredUser(user);
-    localStorage.setItem("registeredUser", JSON.stringify(user));
-
-    alert("Signup Successful!");
-    setShowSignUp(false); // go to SignIn
+    if (
+      storedUser &&
+      storedUser.email === email &&
+      storedUser.password === password
+    ) {
+      setIsAuthenticated(true);
+    } else {
+      setError("Invalid Credentials");
+    }
   };
 
   return (
     <div>
-      <h2>Sign Up</h2>
+      <h2>Sign In</h2>
 
       <form onSubmit={handleSubmit}>
         <input
@@ -46,15 +49,17 @@ const Signup = ({ setRegisteredUser, setShowSignUp }) => {
         <br /><br />
 
         <button type="submit" disabled={!isValid}>
-          Register
+          Login
         </button>
+
+        <p style={{ color: "red" }}>{error}</p>
       </form>
 
-      <p onClick={() => setShowSignUp(false)} style={{ cursor: "pointer", color: "blue" }}>
-        Already have an account? Sign In
+      <p onClick={() => setShowSignUp(true)} style={{ cursor: "pointer", color: "blue" }}>
+        Don't have an account? Sign Up
       </p>
     </div>
   );
 };
 
-export default Signup;
+export default SignIn;
