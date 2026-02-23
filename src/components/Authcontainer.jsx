@@ -3,7 +3,7 @@ import Signup from "./Signup";
 import SignIn from "./SignIn";
 import Dashboard from "./Dashboard";
 
-const AuthContainer = () => {
+const Authcontainer = () => {
 
   //  Lifted state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
